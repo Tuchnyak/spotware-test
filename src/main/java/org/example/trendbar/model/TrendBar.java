@@ -9,6 +9,7 @@ import java.util.Objects;
  */
 public class TrendBar {
 
+    private final String symbol;
     private final BigDecimal openPrice;
     private final BigDecimal closePrice;
     private final BigDecimal highPrice;
@@ -17,7 +18,8 @@ public class TrendBar {
     private final Instant startTimestamp;
     private final Instant endTimestamp;
 
-    public TrendBar(BigDecimal openPrice, BigDecimal closePrice, BigDecimal highPrice, BigDecimal lowPrice, TbPeriodType periodType, Instant startTimestamp) {
+    public TrendBar(String symbol, BigDecimal openPrice, BigDecimal closePrice, BigDecimal highPrice, BigDecimal lowPrice, TbPeriodType periodType, Instant startTimestamp) {
+        this.symbol = symbol;
         this.openPrice = openPrice;
         this.closePrice = closePrice;
         this.highPrice = highPrice;
@@ -28,12 +30,18 @@ public class TrendBar {
     }
 
     public static class Builder {
+        private String symbol;
         private BigDecimal openPrice;
         private BigDecimal closePrice;
         private BigDecimal highPrice;
         private BigDecimal lowPrice;
         private TbPeriodType periodType;
         private Instant startTimestamp;
+
+        public Builder symbol(String symbol) {
+            this.symbol = symbol.toUpperCase();
+            return this;
+        }
 
         public Builder openPrice(BigDecimal openPrice) {
             this.openPrice = openPrice;
@@ -67,7 +75,7 @@ public class TrendBar {
 
         public TrendBar build() {
 
-            return new TrendBar(openPrice, closePrice, highPrice, lowPrice, periodType, startTimestamp);
+            return new TrendBar(symbol, openPrice, closePrice, highPrice, lowPrice, periodType, startTimestamp);
         }
 
     }
@@ -117,7 +125,8 @@ public class TrendBar {
     @Override
     public String toString() {
         return "TrendBar{" +
-                "openPrice=" + openPrice +
+                "symbol='" + symbol + '\'' +
+                ", openPrice=" + openPrice +
                 ", closePrice=" + closePrice +
                 ", highPrice=" + highPrice +
                 ", lowPrice=" + lowPrice +

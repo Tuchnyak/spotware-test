@@ -1,11 +1,11 @@
 package org.example.trendbar.model;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author tuchnyak (George Shchennikov)
  */
 public record TbHistory(
-        List<TrendBar> trendBarList
+        Set<TrendBar> trendBarSet
 ) {
 }
