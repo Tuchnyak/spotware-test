@@ -1,5 +1,6 @@
 package org.example.trendbar;
 
+import org.example.trendbar.queue.QuoteQueueProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -20,6 +21,7 @@ public class MainTest {
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(TrendBarConfig.class);
         logger.info(">>> Config: {}", ctx.getBean("trendBarConfig"));
+        logger.info(">>> QueueProvider: {}", ctx.getBean(QuoteQueueProvider.class));
     }
 
 }
