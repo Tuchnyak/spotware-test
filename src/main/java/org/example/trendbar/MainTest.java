@@ -2,6 +2,8 @@ package org.example.trendbar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -15,6 +17,9 @@ public class MainTest {
 
     public static void main(String[] args) {
         logger.info("Hello world! {}", Instant.now().atZone(ZoneId.systemDefault()));
+
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(TrendBarConfig.class);
+        logger.info(">>> Config: {}", ctx.getBean("trendBarConfig"));
     }
 
 }
