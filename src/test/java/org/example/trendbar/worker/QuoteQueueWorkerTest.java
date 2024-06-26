@@ -57,8 +57,8 @@ public class QuoteQueueWorkerTest {
         queueProvider.enqueue(new Quote(BigDecimal.TEN, "USDAMD", Instant.now()));
         TimeUnit.MILLISECONDS.sleep(4000);
 
-        Mockito.verify(queueProviderSpy, Mockito.times(1)).dequeue();
-        Mockito.verify(tbServiceSpy, Mockito.times(1)).updateTrendBar(Mockito.any());
+        Mockito.verify(queueProviderSpy, Mockito.atLeastOnce()).dequeue();
+        Mockito.verify(tbServiceSpy, Mockito.atLeastOnce()).updateTrendBar(Mockito.any());
     }
 
 }

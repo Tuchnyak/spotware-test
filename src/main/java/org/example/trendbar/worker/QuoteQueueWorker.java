@@ -1,5 +1,6 @@
 package org.example.trendbar.worker;
 
+import org.example.trendbar.TrendBarConfig;
 import org.example.trendbar.model.Quote;
 import org.example.trendbar.queue.QuoteQueueProvider;
 import org.example.trendbar.service.TrendBarService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 /**
  * @author tuchnyak (George Shchennikov)
@@ -36,25 +38,29 @@ public class QuoteQueueWorker implements InitializingBean, DisposableBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        workerExecutor.scheduleWithFixedDelay(
-                () -> {
-                    logger.info(">>> Start queuing");
-                    while (!queueProvider.isEmpty()) {
-                        Optional<Quote> optionalQuote = queueProvider.dequeue();
-                        if (optionalQuote.isPresent()) {
-                            Quote quote = optionalQuote.get();
-                            trendBarService.updateTrendBar(quote);
-                            logger.info(">>> Quote [{}] has been updated", quote);
-                        } else {
-                            logger.debug(">>> Dequeued quote is empty");
-                        }
-                    }
-                    logger.info(">>> End queuing, will sleep for: {}", WORKER_DELAY);
-                },
-                WORKER_INITIAL_DELAY,
-                WORKER_DELAY,
-                TimeUnit.MILLISECONDS
-        );
+        IntStream.range(0, TrendBarConfig.SCHEDULED_POOL_SIZE)
+                .forEach(i -> {
+                    logger.info(">>> {}: Scheduling queue worker", i);
+                    workerExecutor.scheduleWithFixedDelay(
+                            () -> {
+                                logger.info(">>> Start queuing: {}", Thread.currentThread().getName());
+                                while (!queueProvider.isEmpty()) {
+                                    Optional<Quote> optionalQuote = queueProvider.dequeue();
+                                    if (optionalQuote.isPresent()) {
+                                        Quote quote = optionalQuote.get();
+                                        trendBarService.updateTrendBar(quote);
+                                        logger.info(">>> Quote [{}] has been updated", quote);
+                                    } else {
+                                        logger.debug(">>> Dequeued quote is empty");
+                                    }
+                                }
+                                logger.info(">>> End queuing, will sleep for: {}", WORKER_DELAY);
+                            },
+                            WORKER_INITIAL_DELAY,
+                            WORKER_DELAY,
+                            TimeUnit.MILLISECONDS
+                    );
+                });
         logger.info(">>> Queue worker has been scheduled");
     }
 

@@ -52,7 +52,7 @@ public class TrendBarRepositoryStubImpl implements TrendBarRepository {
         return ret;
     }
 
-    Map<TbPeriodType, List<TrendBar>> getStorage() {
+    public Map<TbPeriodType, List<TrendBar>> getStorage() {
 
         return storage;
     }

@@ -112,11 +112,13 @@ public class TrendBarServiceImpl implements TrendBarService, ApplicationListener
 
     @Override
     public void onApplicationEvent(ContextClosedEvent event) {
+        logger.info(">>> Save current trend bars before context close");
         List<TrendBar> trendBarList = currentTrendBars.entrySet().stream()
                 .flatMap(symbolMapEntry -> symbolMapEntry.getValue().entrySet().stream())
                 .map(Map.Entry::getValue)
                 .toList();
         trendBarRepository.saveTrendBarList(trendBarList);
+        logger.info(">>> Current trend bars have been before context close");
     }
 
     public Map<String, Map<TbPeriodType, TrendBar>> getCurrentTrendBars() {
