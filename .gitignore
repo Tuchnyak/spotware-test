@@ -32,6 +32,7 @@ target/
 
 ### All IDEA BY JETBRAINS ###
 .idea
+.idea/
 *.iws
 *.iml
 *.ipr
