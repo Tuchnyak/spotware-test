@@ -3,13 +3,11 @@ package org.example.trendbar.util;
 import org.example.trendbar.model.Quote;
 import org.example.trendbar.model.TbPeriodType;
 import org.example.trendbar.model.TrendBar;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 
 import static org.junit.Assert.*;
 

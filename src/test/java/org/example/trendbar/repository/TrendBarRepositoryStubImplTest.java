@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -92,4 +94,27 @@ public class TrendBarRepositoryStubImplTest {
         assertFalse(actual.get().trendBarSet().isEmpty());
         assertEquals(2, actual.get().trendBarSet().size());
     }
+
+    @Test
+    public void saveTrendBarList() {
+        Map<TbPeriodType, List<TrendBar>> storage = ((TrendBarRepositoryStubImpl) underTest).getStorage();
+        List<TrendBar> listToSave = List.of(
+                new TrendBar.Builder()
+                        .periodType(TbPeriodType.M1)
+                        .symbol("USDAMD")
+                        .startTimestamp(Instant.now())
+                        .build(),
+                new TrendBar.Builder()
+                        .periodType(TbPeriodType.M1)
+                        .symbol("USDAMD")
+                        .startTimestamp(Instant.now())
+                        .build()
+        );
+        assertEquals(0, storage.get(TbPeriodType.M1).size());
+
+        underTest.saveTrendBarList(listToSave);
+
+        assertEquals(2, storage.get(TbPeriodType.M1).size());
+    }
+
 }

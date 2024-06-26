@@ -55,7 +55,7 @@ public class QuoteQueueWorker implements InitializingBean, DisposableBean {
                 WORKER_DELAY,
                 TimeUnit.MILLISECONDS
         );
-        logger.info("Queue worker has been scheduled");
+        logger.info(">>> Queue worker has been scheduled");
     }
 
     @Override

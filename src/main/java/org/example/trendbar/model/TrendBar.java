@@ -2,31 +2,23 @@ package org.example.trendbar.model;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Objects;
 
 /**
  * @author tuchnyak (George Shchennikov)
  */
-public class TrendBar {
+public record TrendBar(
+        String symbol,
+        BigDecimal openPrice,
+        BigDecimal closePrice,
+        BigDecimal highPrice,
+        BigDecimal lowPrice,
+        TbPeriodType periodType,
+        Instant startTimestamp,
+        Instant endTimestamp
+) {
 
-    private final String symbol;
-    private final BigDecimal openPrice;
-    private final BigDecimal closePrice;
-    private final BigDecimal highPrice;
-    private final BigDecimal lowPrice;
-    private final TbPeriodType periodType;
-    private final Instant startTimestamp;
-    private final Instant endTimestamp;
-
-    public TrendBar(String symbol, BigDecimal openPrice, BigDecimal closePrice, BigDecimal highPrice, BigDecimal lowPrice, TbPeriodType periodType, Instant startTimestamp) {
-        this.symbol = symbol;
-        this.openPrice = openPrice;
-        this.closePrice = closePrice;
-        this.highPrice = highPrice;
-        this.lowPrice = lowPrice;
-        this.periodType = periodType;
-        this.startTimestamp = startTimestamp;
-        this.endTimestamp = startTimestamp.plus(1, periodType.getChronoUnit());
+    public TrendBar {
+        endTimestamp = startTimestamp.plus(1, periodType.getChronoUnit());
     }
 
     public static class Builder {
@@ -75,65 +67,9 @@ public class TrendBar {
 
         public TrendBar build() {
 
-            return new TrendBar(symbol, openPrice, closePrice, highPrice, lowPrice, periodType, startTimestamp);
+            return new TrendBar(symbol, openPrice, closePrice, highPrice, lowPrice, periodType, startTimestamp, null);
         }
 
-    }
-
-    // BOILERPLATE CODE
-    public BigDecimal getOpenPrice() {
-        return openPrice;
-    }
-
-    public BigDecimal getClosePrice() {
-        return closePrice;
-    }
-
-    public BigDecimal getHighPrice() {
-        return highPrice;
-    }
-
-    public BigDecimal getLowPrice() {
-        return lowPrice;
-    }
-
-    public TbPeriodType getPeriodType() {
-        return periodType;
-    }
-
-    public Instant getStartTimestamp() {
-        return startTimestamp;
-    }
-
-    public Instant getEndTimestamp() {
-        return endTimestamp;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TrendBar trendBar = (TrendBar) o;
-        return Objects.equals(getOpenPrice(), trendBar.getOpenPrice()) && Objects.equals(getClosePrice(), trendBar.getClosePrice()) && Objects.equals(getHighPrice(), trendBar.getHighPrice()) && Objects.equals(getLowPrice(), trendBar.getLowPrice()) && getPeriodType() == trendBar.getPeriodType() && Objects.equals(getStartTimestamp(), trendBar.getStartTimestamp()) && Objects.equals(getEndTimestamp(), trendBar.getEndTimestamp());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getOpenPrice(), getClosePrice(), getHighPrice(), getLowPrice(), getPeriodType(), getStartTimestamp(), getEndTimestamp());
-    }
-
-    @Override
-    public String toString() {
-        return "TrendBar{" +
-                "symbol='" + symbol + '\'' +
-                ", openPrice=" + openPrice +
-                ", closePrice=" + closePrice +
-                ", highPrice=" + highPrice +
-                ", lowPrice=" + lowPrice +
-                ", periodType=" + periodType +
-                ", startTimestamp=" + startTimestamp +
-                ", endTimestamp=" + endTimestamp +
-                '}';
     }
 
 }

@@ -16,9 +16,10 @@ import java.util.stream.Collectors;
 @Repository
 public class TrendBarRepositoryStubImpl implements TrendBarRepository {
 
-    private final Map<TbPeriodType, List<TrendBar>> storage = new ConcurrentHashMap<>();
+    private final Map<TbPeriodType, List<TrendBar>> storage;
 
     public TrendBarRepositoryStubImpl() {
+        storage = new ConcurrentHashMap<>();
         for (TbPeriodType type : TbPeriodType.values()) {
             storage.put(type, new ArrayList<>());
         }
@@ -26,7 +27,12 @@ public class TrendBarRepositoryStubImpl implements TrendBarRepository {
 
     @Override
     public void saveTrendBar(TrendBar trendBar) {
-        storage.get(trendBar.getPeriodType()).add(trendBar);
+        storage.get(trendBar.periodType()).add(trendBar);
+    }
+
+    @Override
+    public void saveTrendBarList(List<TrendBar> trendBarList) {
+        trendBarList.forEach(trendBar -> storage.get(trendBar.periodType()).add(trendBar));
     }
 
     @Override
@@ -36,7 +42,7 @@ public class TrendBarRepositoryStubImpl implements TrendBarRepository {
         final Instant toTmstmp = (to == null) ? Instant.now() : to;
         Set<TrendBar> filteredTrendBars = storage.get(type)
                 .stream()
-                .filter(tBar -> from.isBefore(tBar.getStartTimestamp()) && toTmstmp.isAfter(tBar.getEndTimestamp()))
+                .filter(tBar -> from.isBefore(tBar.startTimestamp()) && toTmstmp.isAfter(tBar.endTimestamp()))
                 .collect(Collectors.toSet());
 
         if (!filteredTrendBars.isEmpty()) {
